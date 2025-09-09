@@ -15,20 +15,19 @@ class Post
     #[Column, Id, GeneratedValue]
     private int $id;
 
-    #[Column, ManyToOne]
-    private User $user;
-
     #[Column]
     private string $content;
+
+    #[ManyToOne]
+    private User $user;
 
     #[Column]
     private DateTime $postDate;
 
-
-    public function __construct(User $user, string $content, DateTime $postDate)
+    public function __construct(string $content, User $user, DateTime $postDate)
     {
-        $this->user = $user;
         $this->content = $content;
+        $this->user = $user;
         $this->postDate = $postDate;
     }
     public function getId(): int
@@ -36,18 +35,25 @@ class Post
         return $this->id;
     }
 
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
     public function getContent(): string
     {
         return $this->content;
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
     public function getPostDate(): DateTime
     {
         return $this->postDate;
+    }
+
+    public function getPostAge(): int
+    {
+        $today = new DateTime();
+        $interval = $this->postDate->diff($today);
+        return $interval->d;
     }
 }
